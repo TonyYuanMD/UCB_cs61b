@@ -117,6 +117,25 @@ public class Model {
      */
     public boolean atLeastOneMoveExists() {
         // TODO: Fill in this function.
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
+        if (emptySpaceExists()) return true;
+        else {
+            for (int i = 0; i < board.size(); i++) {
+                for (int j = 0; j < board.size(); j++) {
+                    Tile current_t = tile(i, j);
+                    for (int k = 0; k < 4; k++) {
+                        int x = i + dx[k];
+                        int y = j + dy[k];
+
+                        if (x >= 0 && x < board.size() && y >= 0 && y < board.size()) {
+                            Tile nei_t = tile(x, y);
+                            if (current_t.value() == nei_t.value()) {return true;}
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
