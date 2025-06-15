@@ -4,7 +4,9 @@ import game2048rendering.Board;
 import game2048rendering.Side;
 import game2048rendering.Tile;
 
+import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 
 
 /** The state of a game of 2048.
@@ -158,7 +160,24 @@ public class Model {
         int myValue = currTile.value();
         int targetY = y;
 
-        // TODO: Tasks 5, 6, and 10. Fill in this function.
+        // TODO: Tasks 5, 6, and 1
+        //  0. Fill in this function.
+        /* Filter null blocks first. */
+        List<Tile> notNullTiles = new ArrayList<Tile>();
+
+        for (int k = y; k < board.size(); k++) {
+            Tile nullTile = board.tile(x, k);
+            if (nullTile == null) targetY++;
+            else {notNullTiles.add(nullTile);}
+        }
+
+        for (int i = 0; i < notNullTiles.size() - 1; i++) {
+            Tile upperTile = notNullTiles.get(i);
+            Tile lowerTile = notNullTiles.get(i + 1);
+            if (upperTile.value() == lowerTile.value()) targetY++;
+        }
+
+        board.move(x, targetY, currTile);
     }
 
     /** Handles the movements of the tilt in column x of the board
