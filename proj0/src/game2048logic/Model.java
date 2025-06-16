@@ -174,7 +174,10 @@ public class Model {
         for (int i = 0; i < notNullTiles.size() - 1; i++) {
             Tile upperTile = notNullTiles.get(i);
             Tile lowerTile = notNullTiles.get(i + 1);
-            if (upperTile.value() == lowerTile.value()) targetY++;
+            if (upperTile.value() == lowerTile.value() && !upperTile.wasMerged() && !lowerTile.wasMerged()) {
+                targetY++;
+                i++;
+            }
         }
 
         board.move(x, targetY, currTile);
@@ -187,6 +190,12 @@ public class Model {
      * */
     public void tiltColumn(int x) {
         // TODO: Task 7. Fill in this function.
+        for (int i = board.size() - 1; i >= 0; i--) {
+            Tile currTile = board.tile(x, i);
+            if (currTile != null) {
+                moveTileUpAsFarAsPossible(x, i);
+            }
+        }
     }
 
     public void tilt(Side side) {
