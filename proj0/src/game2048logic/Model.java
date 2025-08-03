@@ -104,8 +104,7 @@ public class Model {
                 Tile t = tile(i, j);
                 if (t == null) continue;
                 else if (t.value() >= MAX_PIECE) {
-                    boolean b = true;
-                    return b;
+                    return true;
                 }
             }
         return false;
@@ -171,16 +170,18 @@ public class Model {
             else {notNullTiles.add(nullTile);}
         }
 
-        for (int i = 0; i < notNullTiles.size() - 1; i++) {
+        for (int i = notNullTiles.size() - 1; i > 0; i--) {
             Tile upperTile = notNullTiles.get(i);
-            Tile lowerTile = notNullTiles.get(i + 1);
+            Tile lowerTile = notNullTiles.get(i - 1);
             if (upperTile.value() == lowerTile.value() && !upperTile.wasMerged() && !lowerTile.wasMerged()) {
                 targetY++;
-                i++;
+                i--;
             }
         }
 
-        board.move(x, targetY, currTile);
+        if (!notNullTiles.isEmpty()) {
+            board.move(x, targetY, currTile);
+        }
     }
 
     /** Handles the movements of the tilt in column x of the board
@@ -200,6 +201,9 @@ public class Model {
 
     public void tilt(Side side) {
         // TODO: Tasks 8 and 9. Fill in this function.
+        for (int x = 0; x < board.size(); x++) {
+            tiltColumn(x);
+        }
     }
 
     /** Tilts every column of the board toward SIDE.
