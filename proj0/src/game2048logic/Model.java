@@ -162,26 +162,38 @@ public class Model {
         // TODO: Tasks 5, 6, and 1
         //  0. Fill in this function.
         /* Filter null blocks first. */
-        List<Tile> notNullTiles = new ArrayList<Tile>();
-
-        for (int k = y; k < board.size(); k++) {
-            Tile nullTile = board.tile(x, k);
-            if (nullTile == null) targetY++;
-            else {notNullTiles.add(nullTile);}
-        }
-
-        for (int i = notNullTiles.size() - 1; i > 0; i--) {
-            Tile upperTile = notNullTiles.get(i);
-            Tile lowerTile = notNullTiles.get(i - 1);
-            if (upperTile.value() == lowerTile.value() && !upperTile.wasMerged() && !lowerTile.wasMerged()) {
-                targetY++;
-                i--;
+        int r = y;
+        while(r + 1 < size()){
+            if(tile(x, r+1) == null) r += 1;
+            else {
+                if(tile(x, r+1).value() == currTile.value() && !tile(x, r+1).wasMerged()) {
+                    r += 1;
+                    score = score + 2*currTile.value();
+                }
+                break;
             }
         }
-
-        if (!notNullTiles.isEmpty()) {
-            board.move(x, targetY, currTile);
-        }
+        if(r != y)  board.move(x, r, currTile);
+//        List<Tile> notNullTiles = new ArrayList<Tile>();
+//
+//        for (int k = y; k < board.size(); k++) {
+//            Tile nullTile = board.tile(x, k);
+//            if (nullTile == null) targetY++;
+//            else {notNullTiles.add(nullTile);}
+//        }
+//
+//        for (int i = notNullTiles.size() - 1; i > 0; i--) {
+//            Tile upperTile = notNullTiles.get(i);
+//            Tile lowerTile = notNullTiles.get(i - 1);
+//            if (upperTile.value() == lowerTile.value() && !upperTile.wasMerged() && !lowerTile.wasMerged()) {
+//                targetY++;
+//                i--;
+//            }
+//        }
+//
+//        if (!notNullTiles.isEmpty()) {
+//            board.move(x, targetY, currTile);
+//        }
     }
 
     /** Handles the movements of the tilt in column x of the board
@@ -201,9 +213,11 @@ public class Model {
 
     public void tilt(Side side) {
         // TODO: Tasks 8 and 9. Fill in this function.
+        board.setViewingPerspective(side);
         for (int x = 0; x < board.size(); x++) {
             tiltColumn(x);
         }
+        board.setViewingPerspective(Side.NORTH);
     }
 
     /** Tilts every column of the board toward SIDE.
